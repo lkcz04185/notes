@@ -28,6 +28,12 @@ class NotesController < ApplicationController
     end
   end
 
+  def destroy
+    note = Note.find(params[:id])
+    note.destroy
+    head :no_content
+  end
+
  
   private
 
