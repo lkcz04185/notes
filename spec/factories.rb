@@ -3,4 +3,9 @@ FactoryGirl.define do
     title "First"
     content "Something"
   end
+
+  factory :tag, class: Tag do
+    name "Comment"
+  end
+
 end

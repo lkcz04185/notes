@@ -4,10 +4,12 @@ RSpec.describe TagsController, type: :controller do
 
 
   describe ' tags#create action' do  
+   
     before do
       @note = FactoryGirl.create(:note)
       post :create, params: {tag: {name: 'Crazy'}, note_id: @note.id}
     end
+   
     it 'should return 200 status-code' do
       expect(response).to be_success
     end
@@ -15,13 +17,16 @@ RSpec.describe TagsController, type: :controller do
     it 'should save the tag in the database' do
       expect(@note.tags.first.name).to eq('Crazy')
     end     
+  
   end
 
   describe "tags#create action validations" do
+   
     before do
       @note = FactoryGirl.create(:note)
       post :create, params: {tag: {name: ''}, note_id: @note.id}
     end  
+   
     it 'should properly deal with validations' do
       expect(response).to have_http_status(:unprocessable_entity)
     end
@@ -32,5 +37,25 @@ RSpec.describe TagsController, type: :controller do
     end
 
   end    
+
+  describe 'tags@destroy action' do
+    
+    before do
+      note = FactoryGirl.create(:note)
+      @tag = FactoryGirl.create(:tag, note_id: note.id)
+      delete :destroy, params: {id: @tag.id}
+
+    end
+
+    it 'should return 200 status-code success' do
+      expect(response).to be_success
+    end
+    
+     it 'should deleted a tag from the dataase' do
+      deleted_tag = Tag.find_by_id(@tag.id)
+      expect(deleted_tag).to eq nil
+    end
+
+  end
 
 end
